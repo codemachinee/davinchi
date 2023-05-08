@@ -2,8 +2,38 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ff8fde5e-c92f-45db-b55d-27032f1e8543" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bot.py" beforeDir="false" afterPath="$PROJECT_DIR$/bot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/davinchi.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Procfile" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ball/123" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ball/start_image.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ball/var_eight.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ball/var_eleven.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ball/var_five.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ball/var_four.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ball/var_nine.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ball/var_one.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ball/var_seven.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ball/var_six.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ball/var_ten.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ball/var_tree.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ball/var_two.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/functions_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/functions_file.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gif_mr.Bin.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gif_zverev.mp4" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/runtime.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Женек.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Кирилл.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Леха.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Серега.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Филч.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Я.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/важно.jpeg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/маугли.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/саня.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/фитиль.jpg" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +67,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "last_opened_file_path": "/Users/macbook/PycharmProjects/suetolog-bot"
+    "last_opened_file_path": "/Users/macbook/PycharmProjects/davinchi"
   }
 }]]></component>
   <component name="RecentsManager">

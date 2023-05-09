@@ -44,7 +44,7 @@ class statistic:
         self.wb = load_workbook('chek_list.xlsx')
         self.ws = self.wb['посещения']
 
-    async def obnulenie(self):
+    def obnulenie(self):
         for row in self.ws['B2':f'C{self.ws.max_row}']:
             if row[1].value != 0:
                 row[1].value = int(row[1].value) - 1

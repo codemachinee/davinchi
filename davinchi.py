@@ -34,6 +34,6 @@ async def chek_message(v: types.Message):
 
 if __name__ == '__main__':
     scheduler = BackgroundScheduler()
-    scheduler.add_job(statistic().obnulenie(), "cron", day_of_week='mon-sun', hour=0)
+    scheduler.add_job(statistic().obnulenie, "cron", day_of_week='mon-sun', hour=0)
     scheduler.start()
     executor.start_polling(dp)

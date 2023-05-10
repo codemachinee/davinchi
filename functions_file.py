@@ -2,9 +2,11 @@
 # import gspread
 import openai
 # библиотека проверки даты
-# from datetime import datetime
+from datetime import datetime
+from yoomoney import Client, Quickpay
 from openpyxl import load_workbook  # библиотека работы с exel таблицами
 from paswords import *
+from keyboards import *
 
 saved_messages_davinci = []
 
@@ -78,6 +80,67 @@ class statistic:
         self.wb.save('chek_list.xlsx')
         return 'YES'
 
+
+class platezhy:
+    def __init__(self, bot, message):
+        self.bot = bot
+        self.message = message
+        try:
+            self.marker_mess = self.message.chat.id
+        except AttributeError:
+            self.marker_mess = self.message.message.chat.id
+
+    async def url_generation(self):
+        try:
+            quickpay = Quickpay(
+                receiver="4100116460956966",
+                quickpay_form="shop",
+                targets="payment",
+                paymentType="SB",
+                sum=10,
+                label=self.marker_mess
+            )
+            return quickpay.base_url
+        except AttributeError:
+            quickpay = Quickpay(
+                receiver="4100116460956966",
+                quickpay_form="shop",
+                targets="payment",
+                paymentType="SB",
+                sum=10,
+                label=self.marker_mess
+            )
+            return quickpay.base_url
+
+    async def chec_control(self):
+        token = token_umany
+        client = Client(token)
+        try:
+            print(client.operation_history)
+            print(client.operation_history(label=self.marker_mess))
+            history = client.operation_history(label=self.marker_mess)
+        except AttributeError:
+            history = client.operation_history(label=self.marker_mess)
+        try:
+            if (int(datetime.now().time().hour * 3600 + datetime.now().time().minute * 60 + datetime.now().time().second) -
+                    int(history.operations[0].datetime.time().hour * 3600 + history.operations[0].datetime.minute * 60 +
+                        history.operations[0].datetime.time().second)) <= 12600:        # 3 часа 30 мин
+                await self.bot.send_message(self.message.message.chat.id, f'Оплата прошла, спасибо.')
+                await self.bot.send_message(admin_id, f'🚨!!!ВНИМАНИЕ!!!🚨\n'
+                                                      f'Поступила оплата от:\n'
+                                                      f'id чата: {self.message.message.chat.id}\n'
+                                                      f'Имя: {self.message.from_user.first_name}\n'
+                                                      f'Фамилия: {self.message.from_user.last_name}\n'
+                                                      f'Ссылка: @{self.message.from_user.username}\n')
+            else:
+                await self.bot.send_message(self.message.message.chat.id, f'Платеж не был подтвержден. '
+                                                                          f'Если Вы оплатили товар, напишите в '
+                                                                          f'поддержку @hloapps')
+                await buttons(self.bot, self.message).oplata_buttons(url=await platezhy(self.bot, self.message).url_generation())
+        except IndexError:
+            await self.bot.send_message(self.message.message.chat.id, 'Платеж не найден. Если Вы оплатили товар, '
+                                                                      'напишите в поддержку @hloapps')
+            await buttons(self.bot, self.message).oplata_buttons(url=await platezhy(self.bot, self.message).url_generation())
 
 
 

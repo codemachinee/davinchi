@@ -12,7 +12,7 @@ class buttons:  # класс для создания клавиатур разл
         but1 = types.KeyboardButton(text='Мой статус 🤘🏻')
         but2 = types.KeyboardButton(text='Инструкция 📋')
         but3 = types.KeyboardButton(text='О нас ⁉️')
-        but4 = types.KeyboardButton(text='Пример использования ✅')
+        but4 = types.KeyboardButton(text='Примеры пользования ✅')
         but5 = types.KeyboardButton(text='Оформить подписку 💵')
         kb1.add(but1, but2, but3, but4, but5)
         await self.bot.send_message(self.message.chat.id, text='...', reply_markup=kb1)

@@ -35,6 +35,7 @@ async def Davinci(bot, message, text, answer_message, proverka):
         else:
             await bot.edit_message_text(f'Для дальнейшего использования бота нужно пополнить баланс', message.chat.id,
                                         answer_message.message_id)
+            await buttons(bot, message).oplata_buttons(url=await platezhy(bot, message).url_generation())
     except Exception:
         await bot.send_message(message.chat.id, "Простите но мне нужен перекур..")
         await bot.send_message(admin_id, "Простите но мне нужен перекур..")
@@ -47,19 +48,15 @@ class statistic:
         self.ws = self.wb['посещения']
 
     def obnulenie(self):
+        seconds_now = (datetime.now().time().hour * 3600 + datetime.now().time().minute * 60 + datetime.now().time().second)
         for row in self.ws['B2':f'C{self.ws.max_row}']:
             if row[1].value != 0:
                 row[1].value = int(row[1].value) - 1
-                row[0].value = 0
+                if 0 <= seconds_now <= 21600:
+                    row[0].value = 0
             else:
                 row[0].value = 0
         self.wb.save('chek_list.xlsx')
-
-    # def plus_one(self):
-    #     self.worksheet.update('A2', str(int(self.worksheet.acell('A2').value) + 1))
-    #     self.worksheet.update('B2', str(int(self.worksheet.acell('B2').value) + 1))
-    #     self.worksheet.update('C2', str(int(self.worksheet.acell('C2').value) + 1))
-    #     self.worksheet.update('D2', str(int(self.worksheet.acell('D2').value) + 1))
 
     async def proverka(self, message):
         for row in self.ws['A2':f'C{self.ws.max_row}']:
@@ -80,15 +77,26 @@ class statistic:
         self.wb.save('chek_list.xlsx')
         return 'YES'
 
+    async def status(self, message):
+        for row in self.ws['A2':f'C{self.ws.max_row}']:
+            if row[0].value == message.chat.id:
+                if row[2].value == 0:
+                    return f'Подписка отсутствует. Использовано {row[1].value} из 3 бесплатных запросов'
+                elif 0 < row[2].value <= 4:
+                    return f'Оформлен безлимит на сутки. Осталось более {row[2].value * 6} часов пользования.'
+                elif row[2].value > 4:
+                    return f'Оформлен недельный безлимит. Осталось более {row[2].value * 6} часов пользования.'
+        return f'Подписка отсутствует. Использовано 0 из 3 бесплатных запросов'
+
 
 class platezhy:
     def __init__(self, bot, message):
         self.bot = bot
         self.message = message
         try:
-            self.marker_mess = self.message.chat.id
+            self.marker_mess = str(self.message.chat.id)
         except AttributeError:
-            self.marker_mess = self.message.message.chat.id
+            self.marker_mess = str(self.message.message.chat.id)
 
     async def url_generation(self):
         try:
@@ -113,25 +121,84 @@ class platezhy:
             return quickpay.base_url
 
     async def chec_control(self):
+        wb = load_workbook('chek_list.xlsx')
+        ws = wb['посещения']
         token = token_umany
         client = Client(token)
         try:
-            print(client.operation_history)
-            print(client.operation_history(label=self.marker_mess))
             history = client.operation_history(label=self.marker_mess)
+            # for operation in history.operations:
+            #     print()
+            #     print("Operation:", operation.operation_id)
+            #     print("\tStatus     -->", operation.status)
+            #     print("\tDatetime   -->", operation.datetime)
+            #     print("\tTitle      -->", operation.title)
+            #     print("\tPattern id -->", operation.pattern_id)
+            #     print("\tDirection  -->", operation.direction)
+            #     print("\tAmount     -->", operation.amount)
+            # print(history.operations[0].amount)
         except AttributeError:
             history = client.operation_history(label=self.marker_mess)
         try:
-            if (int(datetime.now().time().hour * 3600 + datetime.now().time().minute * 60 + datetime.now().time().second) -
-                    int(history.operations[0].datetime.time().hour * 3600 + history.operations[0].datetime.minute * 60 +
-                        history.operations[0].datetime.time().second)) <= 12600:        # 3 часа 30 мин
-                await self.bot.send_message(self.message.message.chat.id, f'Оплата прошла, спасибо.')
-                await self.bot.send_message(admin_id, f'🚨!!!ВНИМАНИЕ!!!🚨\n'
-                                                      f'Поступила оплата от:\n'
-                                                      f'id чата: {self.message.message.chat.id}\n'
-                                                      f'Имя: {self.message.from_user.first_name}\n'
-                                                      f'Фамилия: {self.message.from_user.last_name}\n'
-                                                      f'Ссылка: @{self.message.from_user.username}\n')
+            if (datetime.now().day == history.operations[0].datetime.day) or (datetime.now().day ==
+                                                                              history.operations[0].datetime.day + 1):
+                if history.operations[0].amount == 9.7:
+                    for row in ws['A2':f'C{ws.max_row}']:
+                        if row[0].value == self.message.message.chat.id:
+                            if row[2].value == 0:
+                                row[1].value = 0
+                                row[2].value = 4
+                                await self.bot.send_message(self.message.message.chat.id, f'Оплата прошла, спасибо! '
+                                                                                          f'У вас 24 часа пользования '
+                                                                                          f'ботом.')
+                                await self.bot.send_message(admin_id, f'🚨!!!ВНИМАНИЕ!!!🚨\n'
+                                                                      f'Поступила оплата от:\n'
+                                                                      f'id чата: {self.message.message.chat.id}\n'
+                                                                      f'Имя: {self.message.from_user.first_name}\n'
+                                                                      f'Фамилия: {self.message.from_user.last_name}\n'
+                                                                      f'Ссылка: @{self.message.from_user.username}\n')
+                                wb.save('chek_list.xlsx')
+                                break
+                            else:
+                                await self.bot.send_message(self.message.message.chat.id, f'Платеж был проверен ранее, '
+                                                                                          f'у вас 24 часа пользования '
+                                                                                          f'ботом.')
+                                break
+                elif history.operations[0].amount > 9.7:
+                    for row in ws['A2':f'C{ws.max_row}']:
+                        if row[0].value == self.message.message.chat.id:
+                            if row[2].value == 0:
+                                row[1].value = 0
+                                row[2].value = 28
+                                await self.bot.send_message(self.message.message.chat.id, f'Оплата прошла, спасибо! '
+                                                                                          f'У вас 7 дней пользования '
+                                                                                          f'ботом.')
+                                await self.bot.send_message(admin_id, f'🚨!!!ВНИМАНИЕ!!!🚨\n'
+                                                                      f'Поступила оплата от:\n'
+                                                                      f'id чата: {self.message.message.chat.id}\n'
+                                                                      f'Имя: {self.message.from_user.first_name}\n'
+                                                                      f'Фамилия: {self.message.from_user.last_name}\n'
+                                                                      f'Ссылка: @{self.message.from_user.username}\n')
+                                wb.save('chek_list.xlsx')
+                                break
+                            elif 1 <= row[2].value <= 4:
+                                row[1].value = 0
+                                row[2].value += 28
+                                await self.bot.send_message(self.message.message.chat.id, f'Оплата прошла, спасибо! '
+                                                                                          f'У вас добавлено 7 дней '
+                                                                                          f'пользования ботом.')
+                                await self.bot.send_message(admin_id, f'🚨!!!ВНИМАНИЕ!!!🚨\n'
+                                                                      f'Поступила доплата от:\n'
+                                                                      f'id чата: {self.message.message.chat.id}\n'
+                                                                      f'Имя: {self.message.from_user.first_name}\n'
+                                                                      f'Фамилия: {self.message.from_user.last_name}\n'
+                                                                      f'Ссылка: @{self.message.from_user.username}\n')
+                                wb.save('chek_list.xlsx')
+                                break
+                            elif row[2].value >= 24:
+                                await self.bot.send_message(self.message.message.chat.id, f'Платеж был проверен ранее, '
+                                                                                          f'у вас 24 часа пользования '
+                                                                                          f'ботом.')
             else:
                 await self.bot.send_message(self.message.message.chat.id, f'Платеж не был подтвержден. '
                                                                           f'Если Вы оплатили товар, напишите в '

@@ -28,10 +28,11 @@ async def command_start(message: types.Message):
 @dp.message_handler(content_types='text')
 async def chek_message(v: types.Message):
     if v.text == 'Мой статус 🤘🏻':
-        await bot.send_message(v.chat.id, f'Фрагмент в разработке')
+        answer_message = await bot.send_message(v.chat.id, f'загрузка..⏳')
+        await bot.edit_message_text(await statistic().status(message=v), v.chat.id, answer_message.message_id)
     elif v.text == 'Инструкция 📋':
         await bot.send_message(v.chat.id, f'Фрагмент в разработке')
-    elif v.text == 'Пример использования ✅':
+    elif v.text == 'Примеры пользования ✅':
         await bot.send_message(v.chat.id, f'Фрагмент в разработке')
     elif v.text == 'О нас ⁉️':
         await bot.send_message(v.chat.id, f'Фрагмент в разработке')
@@ -52,6 +53,7 @@ async def chek_callback(callback: types.CallbackQuery):
 
 if __name__ == '__main__':
     scheduler = BackgroundScheduler()
-    scheduler.add_job(statistic().obnulenie, "cron", day_of_week='mon-sun', hour=0)
+    #scheduler.add_job(statistic().obnulenie, "cron", day_of_week='mon-sun', hour=0)
+    scheduler.add_job(statistic().obnulenie, "interval", hours=6)
     scheduler.start()
-    executor.start_polling(dp)
+    executor.start_polling(dp, skip_updates=True)

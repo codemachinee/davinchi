@@ -200,7 +200,7 @@ class platezhy:
                                                                                           f'у вас 24 часа пользования '
                                                                                           f'ботом.')
             else:
-                await self.bot.send_message(self.message.message.chat.id, f'Платеж не был подтвержден. '
+                await self.bot.send_message(self.message.message.chat.id, f'Платеж не найден. '
                                                                           f'Если Вы оплатили товар, напишите в '
                                                                           f'поддержку @hloapps')
                 await buttons(self.bot, self.message).oplata_buttons(url=await platezhy(self.bot, self.message).url_generation())

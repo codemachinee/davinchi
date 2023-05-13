@@ -14,15 +14,24 @@ dp = Dispatcher(bot)
 
 @dp.message_handler(commands=['start'])
 async def command_start(message: types.Message):
-    await bot.send_message(message.chat.id, '''приветственный текст /help - справка по боту''')
+    await bot.send_message(message.chat.id,  f'Чатбот умеет:\n\n'
+                                          f'1. Писать и редактировать текст\n'
+                                          f'2. Переводить с любого языка на любой\n'
+                                          f'3. Писать и редактировать код\n'
+                                          f'4. Отвечать на вопросы\n'
+                                          f'5. Писать посты/описание к товарам\n\n '
+                                             f'Чтобы воспользоваться ботом просто напишите запрос в чат\n\n'
+                                             f'/help - справка по боту'
+                           )
     await buttons(bot, message).menu_buttons()
 
 
 @dp.message_handler(commands=['help'])
 async def command_start(message: types.Message):
-    await bot.send_message(message.chat.id, '''фрагмент в разработке
-
-/help - справка по боту''')
+    await bot.send_message(message.chat.id, f'Бесплатно доступно 3 запроса в день\n'
+                                            f'Безлимитное количество запросов:\n'
+                                            f'сутки - 100 руб.\n'
+                                            f'неделя - 500 руб.')
 
 
 @dp.message_handler(content_types='text')
